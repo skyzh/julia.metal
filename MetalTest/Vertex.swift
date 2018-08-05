@@ -12,8 +12,9 @@ struct Vertex{
     
     var x,y,z: Float
     var r,g,b,a: Float
+    var s,t: Float
     
     func floatBuffer() -> [Float] {
-        return [x,y,z,1.0,r,g,b,a]
+        return [x,y,z,1.0,r,g,b,a,s,t,0.0,0.0]
     }
 }

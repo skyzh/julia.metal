@@ -14,6 +14,9 @@
 		CFD49CCE2115C9D200B4C5EB /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD49CCD2115C9D200B4C5EB /* Triangle.swift */; };
 		CFD49CD02115E46300B4C5EB /* Cube.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD49CCF2115E46300B4C5EB /* Cube.swift */; };
 		CFD49CD42115E9DC00B4C5EB /* float4x4+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD49CD32115E9DC00B4C5EB /* float4x4+Extensions.swift */; };
+		CFD49CD62116A84C00B4C5EB /* Julia.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD49CD52116A84C00B4C5EB /* Julia.swift */; };
+		CFD49CD82116B19300B4C5EB /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFD49CD72116B19300B4C5EB /* Plane.swift */; };
+		CFD49CDA2116C28600B4C5EB /* data.jpg in Resources */ = {isa = PBXBuildFile; fileRef = CFD49CD92116C28600B4C5EB /* data.jpg */; };
 		CFEA3DEB211463D800C7DBD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFEA3DEA211463D800C7DBD3 /* AppDelegate.swift */; };
 		CFEA3DEF211463D900C7DBD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CFEA3DEE211463D900C7DBD3 /* Assets.xcassets */; };
 		CFEA3DF2211463D900C7DBD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CFEA3DF0211463D900C7DBD3 /* Main.storyboard */; };
@@ -46,6 +49,9 @@
 		CFD49CCD2115C9D200B4C5EB /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
 		CFD49CCF2115E46300B4C5EB /* Cube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cube.swift; sourceTree = "<group>"; };
 		CFD49CD32115E9DC00B4C5EB /* float4x4+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "float4x4+Extensions.swift"; sourceTree = "<group>"; };
+		CFD49CD52116A84C00B4C5EB /* Julia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Julia.swift; sourceTree = "<group>"; };
+		CFD49CD72116B19300B4C5EB /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
+		CFD49CD92116C28600B4C5EB /* data.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = data.jpg; sourceTree = "<group>"; };
 		CFEA3DE7211463D800C7DBD3 /* MetalTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFEA3DEA211463D800C7DBD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFEA3DEE211463D900C7DBD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,6 +114,7 @@
 		CFEA3DE9211463D800C7DBD3 /* MetalTest */ = {
 			isa = PBXGroup;
 			children = (
+				CFD49CD92116C28600B4C5EB /* data.jpg */,
 				CFD49CD32115E9DC00B4C5EB /* float4x4+Extensions.swift */,
 				CFEA3DEA211463D800C7DBD3 /* AppDelegate.swift */,
 				CFEA3DEE211463D900C7DBD3 /* Assets.xcassets */,
@@ -117,8 +124,10 @@
 				CFEA3DF3211463D900C7DBD3 /* Info.plist */,
 				CFEA3DF4211463D900C7DBD3 /* MetalTest.entitlements */,
 				CFD49CC72115C3FF00B4C5EB /* Node.swift */,
+				CFD49CD52116A84C00B4C5EB /* Julia.swift */,
 				CFD49CCD2115C9D200B4C5EB /* Triangle.swift */,
 				CFD49CCF2115E46300B4C5EB /* Cube.swift */,
+				CFD49CD72116B19300B4C5EB /* Plane.swift */,
 				CFD49CC92115C6DC00B4C5EB /* Shaders.metal */,
 			);
 			path = MetalTest;
@@ -247,6 +256,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFEA3DEF211463D900C7DBD3 /* Assets.xcassets in Resources */,
+				CFD49CDA2116C28600B4C5EB /* data.jpg in Resources */,
 				CFEA3DF2211463D900C7DBD3 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -274,9 +284,11 @@
 			files = (
 				CFD49CCA2115C6DC00B4C5EB /* Shaders.metal in Sources */,
 				CFD49CD42115E9DC00B4C5EB /* float4x4+Extensions.swift in Sources */,
+				CFD49CD82116B19300B4C5EB /* Plane.swift in Sources */,
 				CFD49CC82115C3FF00B4C5EB /* Node.swift in Sources */,
 				CFD49CC62115B92300B4C5EB /* MetalView.swift in Sources */,
 				CFD49CCE2115C9D200B4C5EB /* Triangle.swift in Sources */,
+				CFD49CD62116A84C00B4C5EB /* Julia.swift in Sources */,
 				CFD49CCC2115C88700B4C5EB /* Vertex.swift in Sources */,
 				CFD49CD02115E46300B4C5EB /* Cube.swift in Sources */,
 				CFEA3DEB211463D800C7DBD3 /* AppDelegate.swift in Sources */,

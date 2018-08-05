@@ -15,6 +15,8 @@ class Node {
     let name: String
     let vertexCount: Int
     let vertexBuffer: MTLBuffer
+    var texture: MTLTexture?
+    lazy var samplerState: MTLSamplerState? = Node.defaultSampler(device: self.device)
     
     var positionX: Float = 0.0
     var positionY: Float = 0.0
@@ -25,7 +27,7 @@ class Node {
     var rotationZ: Float = 0.0
     var scale: Float     = 1.0
     
-    init(name: String, vertices: Array<Vertex>, device: MTLDevice) {
+    init(name: String, vertices: Array<Vertex>, device: MTLDevice, texture: MTLTexture?) {
         self.name = name
         self.device = device
         
@@ -36,6 +38,7 @@ class Node {
         let dataSize = vertexData.count * MemoryLayout.size(ofValue: vertexData[0])
         self.vertexBuffer = device.makeBuffer(bytes: vertexData, length: dataSize)!
         self.vertexCount = vertices.count
+        self.texture = texture!
     }
     
     func render(commandQueue: MTLCommandQueue, pipelineState: MTLRenderPipelineState, drawable: CAMetalDrawable, renderPassDescriptor: MTLRenderPassDescriptor, projectionMatrix: float4x4){
@@ -51,6 +54,10 @@ class Node {
         memcpy(bufferPointer, &nodeModelMatrix, MemoryLayout<Float>.size * float4x4.numberOfElements())
         memcpy(bufferPointer + MemoryLayout<Float>.size * float4x4.numberOfElements(), &projectionMatrix, MemoryLayout<Float>.size * float4x4.numberOfElements())
         renderEncoder.setVertexBuffer(uniformBuffer, offset: 0, index: 1)
+        renderEncoder.setFragmentTexture(texture, index: 0)
+        if let samplerState = samplerState {
+            renderEncoder.setFragmentSamplerState(samplerState, index: 0)
+        }
         renderEncoder.drawPrimitives(type: .triangle, vertexStart: 0, vertexCount: vertexCount,
                                      instanceCount: vertexCount/3)
         renderEncoder.endEncoding()
@@ -65,5 +72,20 @@ class Node {
         matrix.rotateAroundX(rotationX, y: rotationY, z: rotationZ)
         matrix.scale(scale, y: scale, z: scale)
         return matrix
+    }
+    
+    class func defaultSampler(device: MTLDevice) -> MTLSamplerState {
+        let sampler = MTLSamplerDescriptor()
+        sampler.minFilter             = MTLSamplerMinMagFilter.nearest
+        sampler.magFilter             = MTLSamplerMinMagFilter.nearest
+        sampler.mipFilter             = MTLSamplerMipFilter.nearest
+        sampler.maxAnisotropy         = 1
+        sampler.sAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.tAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.rAddressMode          = MTLSamplerAddressMode.clampToEdge
+        sampler.normalizedCoordinates = true
+        sampler.lodMinClamp           = 0
+        sampler.lodMaxClamp           = .greatestFiniteMagnitude
+        return device.makeSamplerState(descriptor: sampler)!
     }
 }
