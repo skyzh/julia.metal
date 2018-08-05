@@ -10,63 +10,82 @@ import MetalKit
 
 class MetalView: MTKView {
     var commandQueue: MTLCommandQueue?
-    var rps: MTLRenderPipelineState?
     var cps: MTLComputePipelineState?
-    var cube: Plane?
     var compute: Julia?
-    var projectionMatrix: float4x4?
     
     required init(coder: NSCoder) {
         super.init(coder: coder)
         device = MTLCreateSystemDefaultDevice()
-        
         render()
     }
     
     func render() {
         commandQueue = device!.makeCommandQueue()!
-        /*
-        let textureLoader = MTKTextureLoader(device: device!)
-        let path = Bundle.main.path(forResource: "data", ofType: "jpg")!
-        let data = try! NSData(contentsOfFile: path) as Data
-        let texture = try! textureLoader.newTexture(data: data)
-         */
-        
         compute = Julia(device: device!)
-        cube = Plane(device: device!, texture: compute!.outTexture)
-        cube!.rotationZ = float4x4.degrees(toRad: 45)
-        cube!.scale = 0.5
-        cube!.positionY =  0.0
-        cube!.positionZ = -2.0
-        cube!.positionX = -0.25
-        projectionMatrix = float4x4.makePerspectiveViewAngle(float4x4.degrees(toRad: 90),
-                                                             aspectRatio: Float(self.drawableSize.width / self.drawableSize.height),
-                                                             nearZ: 0.01, farZ: 100.0)
+        
+        compute!.uniform.a_r = -0.4
+        compute!.uniform.a_i = 0.6
+        compute!.uniform.diviter = 100
+        
         let library = device!.makeDefaultLibrary()!
-        let vertex_func = library.makeFunction(name: "vertex_func")
-        let frag_func = library.makeFunction(name: "fragment_func")
         let kernel_func = library.makeFunction(name: "kernel_func")!
-        let rpld = MTLRenderPipelineDescriptor()
-        rpld.vertexFunction = vertex_func
-        rpld.fragmentFunction = frag_func
-        rpld.colorAttachments[0].pixelFormat = .bgra8Unorm
-        rps = try! device!.makeRenderPipelineState(descriptor: rpld)
         cps = try! device!.makeComputePipelineState(function: kernel_func)
-        
         self.framebufferOnly = false
-        
     }
     
     override func draw() {
         super.draw()
-        if let drawable = currentDrawable, let rpd = currentRenderPassDescriptor {
-            rpd.colorAttachments[0].clearColor = MTLClearColorMake(0.5, 0.5, 0.5, 1)
-            cube!.rotationZ += float4x4.degrees(toRad: 1)
-            cube!.rotationY += float4x4.degrees(toRad: 1)
-            cube!.rotationX += float4x4.degrees(toRad: 1)
+        if let drawable = currentDrawable {
+            compute!.uniform.a_i += i_delta
+            compute!.uniform.a_r += r_delta
             compute!.compute(commandQueue: commandQueue!, pipelineState: cps!, drawable: drawable)
             
         }
+    }
+    override func mouseDragged(with event: NSEvent) {
+        compute!.uniform.scale += Float(event.deltaY / 300.0)
+    }
+    override func scrollWheel(with event: NSEvent) {
+        compute!.uniform.cx += Float(event.scrollingDeltaX / 1000.0)
+        compute!.uniform.cy += Float(event.scrollingDeltaY / 1000.0)
+    }
+    
+    var r_delta : Float = 0.0
+    var i_delta : Float = 0.0
+    
+    override func keyDown(with event: NSEvent) {
+        switch(event.keyCode) {
+        case 0x7B:
+            r_delta = -0.0001
+        case 0x7C:
+            r_delta = 0.0001
+        case 0x7D:
+            i_delta = -0.0001
+        case 0x7E:
+            i_delta = 0.0001
+        case 0x31:
+            compute!.uniform.diviter = Float(Int(compute!.uniform.diviter + 100) % 2000)
+        default:
+            break
+        }
+    }
+    override func keyUp(with event: NSEvent) {
+        switch(event.keyCode) {
+        case 0x7B:
+            r_delta = 0
+        case 0x7C:
+            r_delta = 0
+        case 0x7D:
+            i_delta = 0
+        case 0x7E:
+            i_delta = 0
+        default:
+            break
+        }
+    }
+    
+    override var acceptsFirstResponder: Bool {
+        return true
     }
 }
 
